@@ -1,29 +1,34 @@
-interface ProductModel {
-  id: number;
-  name: string;
-  price: number;
-}
-
-const database: ProductModel[] = [
-  { id: 1, name: "Product 1", price: 100 },
-  { id: 2, name: "Product 2", price: 200 },
-  { id: 3, name: "Product 3", price: 300 },
-  { id: 4, name: "Product 4", price: 400 },
-  { id: 5, name: "Product 5", price: 500 },
-  { id: 6, name: "Product 6", price: 600 },
-  { id: 7, name: "Product 7", price: 700 },
-  { id: 8, name: "Product 8", price: 800 },
-  { id: 9, name: "Product 9", price: 900 },
-  { id: 10, name: "Product 10", price: 1000 },
-];
+import ProductModel from '../Models/ProductModel';
+import Product from '../Models/ProductModel';
 
 export const findAllProducts = async (): Promise<ProductModel[]> => {
-  return database;
+  return await Product.findAll();
 };
 
-export const findProductById = async (
-  id: number
-): Promise<ProductModel | null> => {
-  const product = database.find((product) => product.id === id);
-  return product || null;
+export const findProductById = async (id: number): Promise<ProductModel | null> => {
+  return await Product.findByPk(id);
+};
+
+export const createProduct = async (productData: ProductModel): Promise<ProductModel> => {
+  return await Product.create(productData as any);
+};
+
+export const deleteProduct = async (id: number) => {
+  const product = await Product.findByPk(id);
+
+  if (!product) {
+    throw new Error(`Produto com ID ${id} não encontrado.`);
+  }
+
+  await product.destroy();
+};
+
+export const updateProduct = async (id: number, productData: ProductModel): Promise<ProductModel> => {
+  const product = await Product.findByPk(id);
+
+  if (!product) {
+    throw new Error(`Produto com ID ${id} não encontrado.`);
+  }
+
+  return await product.update(productData);
 };
