@@ -10,6 +10,8 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
+app.use(express.json());
+
 sequelize
   .sync()
   .then(() => {
